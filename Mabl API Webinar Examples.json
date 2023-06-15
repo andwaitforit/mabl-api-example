@@ -1,0 +1,463 @@
+{
+  "variable": [
+    {
+      "value": "https://reqres.in/api",
+      "key": "api.url"
+    },
+    {
+      "current": "QpwL5tke4Pnpja7X4",
+      "value": "QpwL5tke4Pnpja7X4",
+      "key": "token"
+    }
+  ],
+  "protocolProfileBehavior": {},
+  "item": [
+    {
+      "name": "Basic Auth/Token Example",
+      "request": {
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "file": "",
+          "urlencoded": [],
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"cityslicka\"\n}",
+          "formdata": [],
+          "graphql": ""
+        },
+        "method": "POST",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "eve.holt@reqres.in",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "cityslicka",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "host": [
+            "{{api.url}}"
+          ],
+          "path": [
+            "login"
+          ],
+          "raw": "{{api.url}}/login"
+        }
+      },
+      "id": "7bcac2cd-4d14-4a67-b81a-95ebbca80cf8",
+      "event": [
+        {
+          "mablVariables": [
+            {
+              "description": "Retrieve bearer token",
+              "assertTarget": "JSONBody",
+              "id": "e5febdca-9dfb-4c17-953a-c0a1f5c74fcf",
+              "variableName": "token",
+              "bodyPath": "token"
+            }
+          ],
+          "mablAssertions": [
+            {
+              "assertType": "Equals",
+              "assertTarget": "Status",
+              "id": "55e64a95-c7a1-4080-b600-893022d0af2d",
+              "value": "200"
+            }
+          ],
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// __MABL_GENERATED__ Do not edit below this line",
+              "pm.environment.set(\"token\", JSON.stringify(_.get(pm.response.json(), pm.variables.replaceIn('token')))?.replace(/^\"(.+(?=\"$))\"$/, '$1'));",
+              "pm.test(\"Status equals 200\", function () { pm.response.to.have.status(parseInt(\"200\")); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Make authenticated request with bearer token",
+      "request": {
+        "header": [],
+        "body": {
+          "mode": "none",
+          "file": "",
+          "urlencoded": [],
+          "raw": "",
+          "formdata": [],
+          "graphql": ""
+        },
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "host": [
+            "{{api.url}}"
+          ],
+          "path": [
+            "users"
+          ],
+          "raw": "{{api.url}}/users?page=2",
+          "query": [
+            {
+              "value": "2",
+              "key": "page"
+            }
+          ]
+        }
+      },
+      "id": "a20dd24f-3227-4024-967b-07489e429964",
+      "event": [
+        {
+          "mablVariables": [],
+          "mablAssertions": [
+            {
+              "assertType": "Equals",
+              "assertTarget": "Status",
+              "id": "8ccc1149-a1cf-4b72-89bb-4e4ae1a06dc4",
+              "value": "200"
+            }
+          ],
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// __MABL_GENERATED__ Do not edit below this line",
+              "pm.test(\"Status equals 200\", function () { pm.response.to.have.status(parseInt(\"200\")); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Store all users to variables with scripting",
+      "request": {
+        "header": [],
+        "body": {
+          "mode": "none",
+          "file": "",
+          "urlencoded": [],
+          "raw": "",
+          "formdata": [],
+          "graphql": ""
+        },
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "host": [
+            "{{api.url}}"
+          ],
+          "path": [
+            "users"
+          ],
+          "raw": "{{api.url}}/users?page=2",
+          "query": [
+            {
+              "value": "2",
+              "key": "page"
+            }
+          ]
+        }
+      },
+      "id": "ce06ed99-3fdb-41cb-834c-ed0a66511dff",
+      "event": [
+        {
+          "mablVariables": [],
+          "mablAssertions": [
+            {
+              "assertType": "Equals",
+              "assertTarget": "Status",
+              "id": "8ccc1149-a1cf-4b72-89bb-4e4ae1a06dc4",
+              "value": "200"
+            }
+          ],
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let jsonData = JSON.parse(responseBody);",
+              "",
+              "for(var i = 0; i<jsonData.data.length; i++){",
+              "  console.log(jsonData.data[i].email);",
+              "  pm.environment.set(\"email\"+i, jsonData.data[i].email);",
+              "}",
+              "",
+              "// __MABL_GENERATED__ Do not edit below this line",
+              "pm.test(\"Status equals 200\", function () { pm.response.to.have.status(parseInt(\"200\")); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "XML Example with JSON tranformation",
+      "request": {
+        "header": [
+          {
+            "description": "",
+            "value": "text/xml; charset=utf-8",
+            "key": "Content-Type"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "file": "",
+          "urlencoded": [],
+          "options": {
+            "raw": {
+              "language": "xml"
+            }
+          },
+          "raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <NumberToWords xmlns=\"http://www.dataaccess.com/webservicesserver/\">\n      <ubiNum>500</ubiNum>\n    </NumberToWords>\n  </soap:Body>\n</soap:Envelope>",
+          "formdata": [],
+          "graphql": ""
+        },
+        "method": "POST",
+        "auth": {},
+        "url": {
+          "host": [
+            "www",
+            "dataaccess",
+            "com"
+          ],
+          "path": [
+            "webservicesserver",
+            "NumberConversion.wso"
+          ],
+          "raw": "https://www.dataaccess.com/webservicesserver/NumberConversion.wso",
+          "protocol": "https"
+        }
+      },
+      "id": "7b52bc2d-0563-4621-bfb7-13bd0d45e589",
+      "event": [
+        {
+          "mablVariables": [],
+          "mablAssertions": [
+            {
+              "assertType": "Equals",
+              "assertTarget": "Status",
+              "id": "2b36187a-00ee-4368-909f-1cf2ad6de4e0",
+              "value": "200"
+            }
+          ],
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let jsonData = xml2Json(responseBody);",
+              "console.log(jsonData);",
+              "console.log(jsonData[\"soap:Envelope\"][\"soap:Body\"][\"m:NumberToWordsResponse\"][\"m:NumberToWordsResult\"]);",
+              "// __MABL_GENERATED__ Do not edit below this line",
+              "pm.test(\"Status equals 200\", function () { pm.response.to.have.status(parseInt(\"200\")); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Check if user exists, and skip create user if present",
+      "request": {
+        "header": [],
+        "body": {
+          "mode": "none",
+          "file": "",
+          "urlencoded": [],
+          "raw": "",
+          "formdata": [],
+          "graphql": ""
+        },
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "host": [
+            "{{api.url}}"
+          ],
+          "path": [
+            "users"
+          ],
+          "raw": "{{api.url}}/users?page=2",
+          "query": [
+            {
+              "value": "2",
+              "key": "page"
+            }
+          ]
+        }
+      },
+      "id": "d466cc91-a0f4-495c-8348-35c9446e84f2",
+      "event": [
+        {
+          "mablVariables": [],
+          "mablAssertions": [
+            {
+              "assertType": "Equals",
+              "assertTarget": "Status",
+              "id": "8ccc1149-a1cf-4b72-89bb-4e4ae1a06dc4",
+              "value": "200"
+            }
+          ],
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let jsonData = JSON.parse(responseBody);",
+              "if(jsonData.data[1].email == \"lindsay.ferguson@reqres.in\"){",
+              "  console.log(\"User exists, skipping user creation step\");",
+              "  postman.setNextRequest(\"Update User\");",
+              "}",
+              "// __MABL_GENERATED__ Do not edit below this line",
+              "pm.test(\"Status equals 200\", function () { pm.response.to.have.status(parseInt(\"200\")); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create User",
+      "request": {
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "file": "",
+          "urlencoded": [],
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"leader\"\n}",
+          "formdata": [],
+          "graphql": ""
+        },
+        "method": "POST",
+        "auth": {},
+        "url": {
+          "host": [
+            "{{api.url}}"
+          ],
+          "path": [
+            "users"
+          ],
+          "raw": "{{api.url}}/users"
+        }
+      },
+      "id": "b6ab66ed-0fca-499c-b2ad-4fc327fe96f3",
+      "event": [
+        {
+          "mablVariables": [],
+          "mablAssertions": [
+            {
+              "assertType": "Equals",
+              "assertTarget": "Status",
+              "id": "745834ce-388f-4cbe-9975-3757c682488b",
+              "value": "201"
+            }
+          ],
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// __MABL_GENERATED__ Do not edit below this line",
+              "pm.test(\"Status equals 201\", function () { pm.response.to.have.status(parseInt(\"201\")); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update User",
+      "request": {
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "file": "",
+          "urlencoded": [],
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"zion resident\"\n}",
+          "formdata": [],
+          "graphql": ""
+        },
+        "method": "PATCH",
+        "auth": {},
+        "url": {
+          "host": [
+            "{{api.url}}"
+          ],
+          "path": [
+            "users",
+            "2"
+          ],
+          "raw": "{{api.url}}/users/2"
+        }
+      },
+      "id": "6ef68b21-dc8e-4576-8b5e-8c3d45ed4e48",
+      "event": [
+        {
+          "mablVariables": [],
+          "mablAssertions": [
+            {
+              "assertType": "Equals",
+              "assertTarget": "Status",
+              "id": "f45f2915-7f74-438b-b1a5-6be9b8fd9ee6",
+              "value": "200"
+            }
+          ],
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// __MABL_GENERATED__ Do not edit below this line",
+              "pm.test(\"Status equals 200\", function () { pm.response.to.have.status(parseInt(\"200\")); });"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "info": {
+    "name": "Mabl API Webinar Examples",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  }
+}
